@@ -1,15 +1,7 @@
 package ch.zuehlke.fullstack.hackathon.service;
 
-import ch.zuehlke.fullstack.hackathon.model.Game;
-import org.springframework.stereotype.Service;
+import ch.zuehlke.fullstack.hackathon.model.Login;
 
-import java.util.List;
-import java.util.Random;
-
-@Service
-public class LoginService {
-
-    public void getExampleDto() {
-    }
-
+public interface LoginService {
+    void getInformationFrom(Login login);
 }
