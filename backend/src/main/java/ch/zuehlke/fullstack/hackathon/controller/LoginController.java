@@ -1,7 +1,6 @@
 package ch.zuehlke.fullstack.hackathon.controller;
 
-import ch.zuehlke.fullstack.hackathon.model.ExampleDto;
-import ch.zuehlke.fullstack.hackathon.service.ExampleService;
+import ch.zuehlke.fullstack.hackathon.service.LoginService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -13,29 +12,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/example")
-public class ExampleController {
+@RequestMapping("/api/login")
+public class LoginController {
 
-    private final ExampleService exampleService;
+    private final LoginService loginService;
 
     @Autowired
-    public ExampleController(ExampleService exampleService) {
-        this.exampleService = exampleService;
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
     }
 
-    @ApiOperation(value = "Example demo DTO",
-            notes = "This can be used to enrich swagger documentation")
+    @ApiOperation(value = "Login",
+            notes = "This is used for the controlling the login")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully returned example"),
+            @ApiResponse(code = 200, message = "Successfull"),
             @ApiResponse(code = 500, message = "If something fails internally")})
     @GetMapping
-    public ResponseEntity<ExampleDto> getExample() {
-        ExampleDto result;
+    public ResponseEntity<?> getExample() {
         try {
-            result = this.exampleService.getExampleDto();
+             this.loginService.getExampleDto();
         } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(1, HttpStatus.OK);
     }
 }
