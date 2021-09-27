@@ -10,6 +10,7 @@ import {StartComponent} from "./components/start/start.component";
 import {RankingComponent} from "./components/ranking/ranking.component";
 import {StartViewComponent} from "./views/start-view/start-view.component";
 import {EndViewComponent} from "./views/end-view/end-view.component";
+import {GameModule} from "./modules/game/game.module";
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {EndViewComponent} from "./views/end-view/end-view.component";
     MDBBootstrapModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    GameModule
   ],
   providers: [],
   bootstrap: [AppComponent]
