@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ExampleService} from "./example.service";
 import {finalize, take} from "rxjs/operators";
-import {ExampleDto} from "../../model/example/ExampleDto";
+import {ExampleDto} from "../../../model/example/ExampleDto";
 
 @Component({
   selector: 'app-example-component',

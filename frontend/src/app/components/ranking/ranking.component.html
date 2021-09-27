@@ -1,0 +1,18 @@
+<div>
+  <h1>Rankings</h1>
+  <table mdbTable [striped]="true">
+    <thead>
+    <tr>
+      <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr mdbTableCol *ngFor="let el of elements">
+      <th scope="row">{{el.rank}}</th>
+      <td>{{el.name}}</td>
+      <td>{{el.time}}</td>
+      <td>{{el.date}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
