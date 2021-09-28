@@ -80,7 +80,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     private HttpHeaders generateHeader(){
-        String plainCreds =  "georg.mohr@zuehlke.com:Hid93GRMBOS!";
+        String plainCreds =  "";
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);
