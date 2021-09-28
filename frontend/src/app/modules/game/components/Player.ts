@@ -1,6 +1,7 @@
 import Phaser, {Scene} from "phaser";
 import Sprite = Phaser.Physics.Arcade.Sprite;
 import Key = Phaser.Input.Keyboard.Key;
+import {Router} from "@angular/router";
 
 /**
  * A class that wraps up our 2D platforming player logic. It creates, animates and moves a sprite in
@@ -79,6 +80,12 @@ export default class Player {
     } else {
       sprite.anims.stop();
       sprite.setTexture("player", 10);
+    }
+  }
+
+  freeze() {
+    if(this.sprite.body instanceof Phaser.Physics.Arcade.Body){
+      (this.sprite.body as Phaser.Physics.Arcade.Body).moves = false
     }
   }
 
