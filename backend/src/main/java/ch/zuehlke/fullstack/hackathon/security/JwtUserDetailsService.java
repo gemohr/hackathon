@@ -39,9 +39,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     GameRepository gameRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username){
+    public UserDetails loadUserByUsername(String username) {
         ch.zuehlke.fullstack.hackathon.model.User user = userRepository.findByUsername(username);
-        if ( user != null ) {
+        if (user != null) {
             return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
         }
         return null;
@@ -49,25 +49,25 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 
     public UserDetails checkIfInInsight(String username, String password) throws Exception {
-            ResponseEntity<String> response = getInformationsFromInsight(username);
-            if(response.getStatusCode() == HttpStatus.OK) {
-                ch.zuehlke.fullstack.hackathon.model.User newUser = new ch.zuehlke.fullstack.hackathon.model.User();
-                ObjectMapper mapper = new ObjectMapper();
-                ArrayNode json = (ArrayNode) mapper.readTree(response.getBody());
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                newUser.setUsername(username);
-                newUser.setPassword(passwordEncoder.encode(password));
-                newUser = userRepository.save(newUser);
+        ResponseEntity<String> response = getInformationsFromInsight(username);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            ch.zuehlke.fullstack.hackathon.model.User newUser = new ch.zuehlke.fullstack.hackathon.model.User();
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode json = (ArrayNode) mapper.readTree(response.getBody());
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            newUser.setUsername(username);
+            newUser.setPassword(passwordEncoder.encode(password));
+            newUser = userRepository.save(newUser);
 
-                Game game = new Game();
-                game.setFullName(json.get(0).get("FirstName").asText() + " " + json.get(0).get("LastName").asText());
-                game.setPictureId(json.get(0).get("PictureId").asLong());
-                gameRepository.save(game);
+            Game game = new Game();
+            game.setFullName(json.get(0).get("FirstName").asText() + " " + json.get(0).get("LastName").asText());
+            game.setPictureId(json.get(0).get("PictureId").asLong());
+            gameRepository.save(game);
 
-                return new User(newUser.getUsername(), newUser.getPassword(), new ArrayList<>());
-            } else {
-                throw new UsernameNotFoundException("User not found with username: " + username);
-            }
+            return new User(newUser.getUsername(), newUser.getPassword(), new ArrayList<>());
+        } else {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
     }
 
     private final String uri = "https://insight.zuehlke.com/api/v1/employees?name=";
@@ -76,16 +76,16 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> request = new HttpEntity<>(generateHeader());
-        ResponseEntity<String> response = restTemplate.exchange(uri+username, HttpMethod.GET, request, String.class);
-        if(response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+        ResponseEntity<String> response = restTemplate.exchange(uri + username, HttpMethod.GET, request, String.class);
+        if (response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
             throw new Exception("INVALID_CREDENTIALS");
         } else {
             return response;
         }
     }
 
-    private HttpHeaders generateHeader(){
-        String plainCreds =  serviceUserEmail+":"+serviceUserPassword;
+    private HttpHeaders generateHeader() {
+        String plainCreds = serviceUserEmail + ":" + serviceUserPassword;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);

@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name="game")
+@Table(name = "game")
 public class Game implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

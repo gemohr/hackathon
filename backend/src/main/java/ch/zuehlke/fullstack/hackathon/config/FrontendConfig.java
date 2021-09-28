@@ -14,7 +14,9 @@ import java.io.IOException;
 @Configuration
 public class FrontendConfig implements WebMvcConfigurer {
     @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {return new HttpSessionEventPublisher();}
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -36,7 +38,7 @@ public class FrontendConfig implements WebMvcConfigurer {
         @Override
         protected Resource getResource(String resourcePath, Resource location) throws IOException {
             Resource resource = super.getResource(resourcePath, location);
-            if(resource == null) {
+            if (resource == null) {
                 return new ClassPathResource(resourceBasePath + "index.html");
             } else {
                 return resource;

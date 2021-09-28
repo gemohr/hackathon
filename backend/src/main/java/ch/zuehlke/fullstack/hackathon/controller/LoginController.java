@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
 
-        LoginService loginService;
+    LoginService loginService;
 
 
     @Autowired
@@ -33,7 +33,7 @@ public class LoginController {
             @ApiResponse(code = 500, message = "If something fails internally")})
     @PostMapping
     public ResponseEntity<?> login(@RequestBody Login login) throws Exception {
-        return new ResponseEntity<>(loginService.auth(login),HttpStatus.OK);
+        return new ResponseEntity<>(loginService.auth(login), HttpStatus.OK);
     }
 
 }
