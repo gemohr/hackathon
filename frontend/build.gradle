@@ -25,3 +25,4 @@ task lint(dependsOn: npm_run_lint) {
     group "Frontend"
     description "Executes linting of the frontend code"
 }
+

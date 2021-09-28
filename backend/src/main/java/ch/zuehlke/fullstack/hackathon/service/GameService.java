@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameService {
@@ -20,15 +22,23 @@ public class GameService {
     }
 
     public Game playerId(long id){
-        return gameRepository.findById(id).get();
+        Optional<Game> game = gameRepository.findById(id);
+        return game.orElse(null);
     }
 
     public List<Game> getRanking() {
         return gameRepository.findAll(Sort.by(Sort.Direction.ASC, "pos"));
     }
 
-    public void setNewUser() {
-
+    public String saveNewGameTime(long id, long time) {
+        Game game = gameRepository.findById(id).orElseThrow(() -> new InternalError("No Game Found to update you are a cheater!!!"));
+        if(game.getTime() > time || game.getTime() == 0) {
+            game.setTime(time);
+            game.setDate(new Date());
+            gameRepository.save(game);
+            return "better";
+        }
+        return "worse than before";
     }
 
 }

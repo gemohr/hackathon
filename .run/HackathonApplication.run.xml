@@ -5,8 +5,13 @@
     <option name="ACTIVE_PROFILES" value="dev" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <option name="SHORTEN_COMMAND_LINE" value="NONE" />
+    <envs>
+      <env name="email" value="&lt;yourZuehlkeMailAdress&gt;" />
+      <env name="password" value="&lt;yourZuehlkePassword&gt;" />
+    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="assemble" externalProjectPath="$PROJECT_DIR$/backend" vmOptions="" scriptParameters="" />
     </method>
   </configuration>
 </component>

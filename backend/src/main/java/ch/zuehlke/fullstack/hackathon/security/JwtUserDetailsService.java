@@ -1,16 +1,13 @@
 package ch.zuehlke.fullstack.hackathon.security;
 
-import java.util.ArrayList;
-
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.repository.GameRepository;
 import ch.zuehlke.fullstack.hackathon.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,8 +21,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
+
+    @Value("${email}")
+    private String serviceUserEmail;
+
+    @Value("${password}")
+    private String serviceUserPassword;
 
     @Autowired
     UserRepository userRepository;
@@ -80,7 +85,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     private HttpHeaders generateHeader(){
-        String plainCreds =  "";
+        String plainCreds =  serviceUserEmail+":"+serviceUserPassword;
         byte[] plainCredsBytes = plainCreds.getBytes();
         byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
         String base64Creds = new String(base64CredsBytes);

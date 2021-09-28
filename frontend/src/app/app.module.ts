@@ -11,6 +11,7 @@ import {RankingComponent} from "./components/ranking/ranking.component";
 import {StartViewComponent} from "./views/start-view/start-view.component";
 import {EndViewComponent} from "./views/end-view/end-view.component";
 import {GameModule} from "./modules/game/game.module";
+import {APP_BASE_HREF} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import {GameModule} from "./modules/game/game.module";
     HttpClientModule,
     GameModule
   ],
-  providers: [],
+  providers: [{provide: APP_BASE_HREF, useValue: "/frontend"}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

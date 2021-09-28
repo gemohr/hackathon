@@ -41,7 +41,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             // other public endpoints of your API may be appended to this array
             "/api/login",
-            "/h2-console/**"
+            "/h2-console/**",
+            "/send/**",
+            "/sockets",
+            "/api/game/**",
+            "/frontend",
+            "/frontend/**"
     };
 
 

@@ -21,6 +21,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     implementation 'com.h2database:h2:1.4.200'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
@@ -32,4 +34,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+ext.ui_dir="ui/"
+
+processResources {
+    //dependsOn(':frontend:assemble')
+    def ui_build_dir = "${rootDir}/frontend/dist"
+    inputs.files fileTree(ui_build_dir)
+    from(ui_build_dir) {
+        into ui_dir
+    }
 }
