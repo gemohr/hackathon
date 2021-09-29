@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -36,6 +37,18 @@ public class GameController {
 
         return new ResponseEntity<>(ranking, HttpStatus.OK);
 
+    }
+
+    @ApiOperation(value = "Ranking",
+            notes = "Here you will see the ranking")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfull"),
+            @ApiResponse(code = 500, message = "If something fails internally")})
+
+    @GetMapping("/byUser")
+
+    public ResponseEntity<Game> getGameByUsername(@RequestParam(value="username", required = true) String username) {
+        return new ResponseEntity<>(gameService.gameByUsername(username), HttpStatus.OK);
     }
 
 
