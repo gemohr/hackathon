@@ -25,7 +25,7 @@ public class SwaggerConfig {
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private ApiKey apiKey() {
-        return new ApiKey("JWT", AUTHORIZATION_HEADER, "header");
+        return new ApiKey("bearerAuth", AUTHORIZATION_HEADER, "header");
     }
 
     private ApiInfo apiInfo() {
@@ -61,6 +61,6 @@ public class SwaggerConfig {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+        return Arrays.asList(new SecurityReference("bearerAuth", authorizationScopes));
     }
 }

@@ -1,14 +1,17 @@
 DROP TABLE IF EXISTS game;
 
-CREATE TABLE game
+CREATE TABLE IF NOT EXISTS game
 (
     id   BIGINT PRIMARY KEY,
     pos  INT,
     time BIGINT,
-    date DATE
+    date DATE,
+    picture BLOB,
+    picture_id BIGINT,
+    full_name VARCHAR (255)
 );
 
-CREATE TABLE USER (
+CREATE TABLE IF NOT EXISTS USER (
     id BIGINT PRIMARY KEY,
     USERNAME VARCHAR (255),
     PASSWORD VARCHAR (255)

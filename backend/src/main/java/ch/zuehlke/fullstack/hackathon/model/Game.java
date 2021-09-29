@@ -23,5 +23,4 @@ public class Game implements Serializable {
     private Date date;
     private String fullName;
     private long pictureId;
-
 }
