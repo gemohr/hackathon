@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,11 +21,6 @@ public class GameController {
 
     public GameController(GameService gameService) {
         this.gameService = gameService;
-    }
-
-    @GetMapping("/player/{id}")
-    public ResponseEntity<?> getPlayerById(@PathVariable("id") long id) {
-        return new ResponseEntity<>(gameService.playerId(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Ranking",

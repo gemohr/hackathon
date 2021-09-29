@@ -25,8 +25,8 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game playerId(long id) {
-        Optional<Game> game = gameRepository.findById(id);
+    public Game gameByUsername(String username) {
+        Optional<Game> game = gameRepository.findByUsername(username);
         return game.orElse(null);
     }
 

@@ -5,7 +5,7 @@ import ch.zuehlke.fullstack.hackathon.model.Game;
 import java.util.List;
 
 public interface GameService {
-    Game playerId(long id);
+    Game gameByUsername(String username);
 
     List<Game> getRanking();
 

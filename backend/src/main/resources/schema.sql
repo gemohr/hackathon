@@ -1,4 +1,11 @@
 DROP TABLE IF EXISTS game;
+DROP TABLE IF EXISTS user;
+
+CREATE TABLE IF NOT EXISTS USER (
+                                    id BIGINT PRIMARY KEY,
+                                    USERNAME VARCHAR (255) not null,
+                                    PASSWORD VARCHAR (255) not null
+);
 
 CREATE TABLE IF NOT EXISTS game
 (
@@ -8,11 +15,9 @@ CREATE TABLE IF NOT EXISTS game
     date DATE,
     picture BLOB,
     picture_id BIGINT,
-    full_name VARCHAR (255)
+    full_name VARCHAR (255),
+    username VARCHAR (255),
+    foreign key (username) references user(username)
 );
 
-CREATE TABLE IF NOT EXISTS USER (
-    id BIGINT PRIMARY KEY,
-    USERNAME VARCHAR (255),
-    PASSWORD VARCHAR (255)
-);
+

@@ -2,15 +2,11 @@ package ch.zuehlke.fullstack.hackathon.security;
 
 import ch.zuehlke.fullstack.hackathon.model.Game;
 import ch.zuehlke.fullstack.hackathon.repository.GameRepository;
+import ch.zuehlke.fullstack.hackathon.repository.InsightRepository;
 import ch.zuehlke.fullstack.hackathon.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -19,24 +15,23 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
-    @Value("${email}")
-    private String serviceUserEmail;
 
-    @Value("${password}")
-    private String serviceUserPassword;
-
-    @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+    private GameRepository gameRepository;
+    private InsightRepository insightRepository;
 
     @Autowired
-    GameRepository gameRepository;
+    public JwtUserDetailsService(UserRepository userRepository, GameRepository gameRepository, InsightRepository insightRepository) {
+        this.userRepository = userRepository;
+        this.gameRepository = gameRepository;
+        this.insightRepository = insightRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -49,7 +44,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 
     public UserDetails checkIfInInsight(String username, String password) throws Exception {
-        ResponseEntity<String> response = getInformationsFromInsight(username);
+        ResponseEntity<String> response = insightRepository.getUserInformationsFromInsight(username);
         if (response.getStatusCode() == HttpStatus.OK) {
             ch.zuehlke.fullstack.hackathon.model.User newUser = new ch.zuehlke.fullstack.hackathon.model.User();
             ObjectMapper mapper = new ObjectMapper();
@@ -62,35 +57,13 @@ public class JwtUserDetailsService implements UserDetailsService {
             Game game = new Game();
             game.setFullName(json.get(0).get("FirstName").asText() + " " + json.get(0).get("LastName").asText());
             game.setPictureId(json.get(0).get("PictureId").asLong());
+            game.setPicture(this.insightRepository.getUserPicture(game.getPictureId()));
+            game.setUsername(newUser.getUsername());
             gameRepository.save(game);
 
             return new User(newUser.getUsername(), newUser.getPassword(), new ArrayList<>());
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-    }
-
-    private final String uri = "https://insight.zuehlke.com/api/v1/employees?name=";
-
-    private ResponseEntity<String> getInformationsFromInsight(String username) throws Exception {
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<>(generateHeader());
-        ResponseEntity<String> response = restTemplate.exchange(uri + username, HttpMethod.GET, request, String.class);
-        if (response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            throw new Exception("INVALID_CREDENTIALS");
-        } else {
-            return response;
-        }
-    }
-
-    private HttpHeaders generateHeader() {
-        String plainCreds = serviceUserEmail + ":" + serviceUserPassword;
-        byte[] plainCredsBytes = plainCreds.getBytes();
-        byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-        String base64Creds = new String(base64CredsBytes);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Basic " + base64Creds);
-        return headers;
     }
 }
