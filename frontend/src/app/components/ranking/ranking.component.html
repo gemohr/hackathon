@@ -8,10 +8,10 @@
     </thead>
     <tbody>
     <tr mdbTableCol *ngFor="let el of elements">
-      <th scope="row">{{el.rank}}</th>
-      <td>{{el.name}}</td>
-      <td>{{el.time}}</td>
-      <td>{{el.date}}</td>
+      <th scope="row">{{el.pos}}</th>
+      <td>{{el.fullName}}</td>
+      <td>{{getFormattedTime(el)}}</td>
+      <td>{{el.date | date: 'dd/MM/yyyy' }}</td>
     </tr>
     </tbody>
   </table>

@@ -1,6 +1,6 @@
 <div>
   <!-- Default form login -->
-  <form class="text-center border border-light p-5">
+  <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="text-center border border-light p-5">
 
     <p class="h4 no-margin">Sign in</p>
     <p class="d-flex justify-content-around">
@@ -9,10 +9,10 @@
 
 
     <!-- Email -->
-    <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
+    <input formControlName="name" type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
 
     <!-- Password -->
-    <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password">
+    <input formControlName="password" type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password">
 
     <!-- Sign in button -->
     <button mdbBtn color="info" [block]="true" class="my-4" type="submit">Sign in</button>

@@ -4,17 +4,17 @@
 
   <div class="img-size round-image view rgba-white-slight waves-light" mdbWavesEffect>
     <!-- Card img -->
-    <mdb-card-img src="../../../assets/cagatay.jpeg" alt="Card image cap"></mdb-card-img>
+    <mdb-card-img [src]="image"></mdb-card-img>
   </div>
   <!--Card content-->
   <mdb-card-body>
     <!--Title-->
     <mdb-card-title>
-      <h4>Cagatay Özyurt</h4>
+      <h4>{{fullName}}</h4>
     </mdb-card-title>
 
     <!--Text-->
-    <mdb-card-text>1st place - 1:23:3451</mdb-card-text>
+    <mdb-card-text>{{pos}} - {{time}}</mdb-card-text>
 
     <a (click)="navigateToGame()" mdbBtn color="primary" mdbWavesEffect>Start</a>
   </mdb-card-body>

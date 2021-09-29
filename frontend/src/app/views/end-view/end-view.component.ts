@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import {NavigationEnd, Router} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'end-view-component',
@@ -11,9 +12,10 @@ export class EndViewComponent implements OnInit {
   constructor(private _router: Router) {}
 
   ngOnInit(): void {
+
   }
 
   navigateToGame() {
-    this._router.navigate(['game'])
+    this._router.navigate(["game"]);
   }
 }

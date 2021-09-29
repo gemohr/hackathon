@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import Phaser from 'phaser';
 import MainScene from "./MainScene";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
+import {Subscription} from "rxjs";
+import {GameControllerService} from "../../../api/services/game-controller.service";
 
 @Component({
   selector: 'app-game',
@@ -13,14 +15,19 @@ export class GameComponent implements OnInit {
   config: Phaser.Types.Core.GameConfig;
   gameEndHandler: Function;
 
-  constructor(private _router: Router, private _route: ActivatedRoute) {
+  constructor(private _router: Router, private _route: ActivatedRoute, private gameController: GameControllerService) {
     this.config = {
       type: Phaser.AUTO,
-      height: 600,
-      width: 800,
+      scale: {
+        mode: Phaser.Scale.FIT,
+        parent: 'gameContainer',
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 800,
+        height: 600
+      },
       scene: [ MainScene ],
-      parent: 'gameContainer',
-      pixelArt: true,
+      pixelArt: false,
+      antialias: true,
       physics: {
         default: 'arcade',
         arcade: {
@@ -29,15 +36,12 @@ export class GameComponent implements OnInit {
       }
     };
 
-    _route.params.subscribe(val => {
-      //this.phaserGame.registry.destroy(); // destroy registry
-      //this.phaserGame.events.off(); // disable all active events
-      //this.phaserGame.scene.; // restart current scene
-    });
-
     //Game End Handler
     this.gameEndHandler = () => {
-      this._router.navigate(['end']);
+      this.phaserGame.destroy(true)
+      this._router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this._router.onSameUrlNavigation = 'reload';
+      this._router.navigate(["end"]);
     }
   }
 

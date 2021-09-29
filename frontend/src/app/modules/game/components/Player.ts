@@ -1,7 +1,6 @@
 import Phaser, {Scene} from "phaser";
 import Sprite = Phaser.Physics.Arcade.Sprite;
-import Key = Phaser.Input.Keyboard.Key;
-import {Router} from "@angular/router";
+import Texture = Phaser.Textures.Texture;
 
 /**
  * A class that wraps up our 2D platforming player logic. It creates, animates and moves a sprite in
@@ -12,6 +11,7 @@ export default class Player {
   scene: Scene;
   sprite: Sprite;
   keys: any;
+  profileImg: Phaser.GameObjects.Sprite;
 
   constructor(scene: Scene, x: number, y: number) {
     this.scene = scene;
@@ -36,6 +36,10 @@ export default class Player {
       .sprite(x, y, "player", 0)
       .setDrag(1000, 0)
       .setMaxVelocity(300, 400);
+
+
+    this.profileImg = this.scene.add.sprite(x, y, 'profileImage')
+    this.profileImg.setScale(0.05)
 
     // Track the arrow keys & WASD
     const { LEFT, RIGHT, UP, W, A, D } = Phaser.Input.Keyboard.KeyCodes;
@@ -81,6 +85,10 @@ export default class Player {
       sprite.anims.stop();
       sprite.setTexture("player", 10);
     }
+
+    //Move profile img on player
+    this.profileImg.x = this.sprite.x;
+    this.profileImg.y = this.sprite.y-7;
   }
 
   freeze() {

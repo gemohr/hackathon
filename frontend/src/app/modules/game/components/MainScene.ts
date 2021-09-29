@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Player from "./Player";
+import {CompatClient, Stomp} from "@stomp/stompjs";
 import TilemapLayer = Phaser.Tilemaps.TilemapLayer;
 import TiledObject = Phaser.Types.Tilemaps.TiledObject;
 import StaticGroup = Phaser.Physics.Arcade.StaticGroup;
@@ -13,6 +14,10 @@ export default class MainScene extends Phaser.Scene {
   isPlayerDead: Boolean;
   spikeGroup: StaticGroup;
   endPoint: TiledObject;
+  stompSocket: CompatClient;
+  timer: number;
+  timerText: Phaser.GameObjects.Text;
+  hasTimerStarted: Boolean = false;
 
   preload() {
     this.load.spritesheet(
@@ -25,6 +30,10 @@ export default class MainScene extends Phaser.Scene {
         spacing: 2
       }
     );
+
+    let gameJson = JSON.parse(localStorage.getItem("game")!!);
+
+    this.load.image('profileImage', "../../../../assets/cagatay.png")
     this.load.image("spike", "../../../../assets/game/spritesheets/0x72-industrial-spike.png");
     this.load.image(
       "tiles",
@@ -106,6 +115,17 @@ export default class MainScene extends Phaser.Scene {
         backgroundColor: "#ffffff"
       })
       .setScrollFactor(0);
+
+    this.timerText = this.add
+      .text(400, 16, "--:--.-", {
+        font: "18px monospace",
+        color: "#000000",
+        padding: { x: 20, y: 10 },
+        backgroundColor: "#ffffff"
+      })
+      .setScrollFactor(0);
+
+    this.startTimer()
   }
 
   update(time: number, delta: number) {
@@ -136,7 +156,55 @@ export default class MainScene extends Phaser.Scene {
 
     //End Game condition
     if(this.player.sprite.x > this.endPoint.x!!) {
-      this.game.events.emit("finish")
+      this.endTimer()
     }
+  }
+
+  startTimer() {
+    if(!this.hasTimerStarted) {
+      this.stompSocket = Stomp.client("ws://localhost:8080/sockets")
+
+      let id = JSON.parse(localStorage.getItem('game')!!).id
+
+      this.stompSocket.connect({}, () => {
+        this.stompSocket.subscribe("/send/start/" + id, (time) => {
+          this.timer = parseInt(time.body)
+          this.timerText.setText(this.timerFormatter())
+        })
+      })
+      this.hasTimerStarted = true;
+    }
+  }
+
+  endTimer() {
+    this.stompSocket = Stomp.client("ws://localhost:8080/sockets")
+
+    let id = JSON.parse(localStorage.getItem('game')!!).id
+
+    this.stompSocket.connect({}, () => {
+      this.stompSocket.subscribe("/send/finish/" + id, (message) => {
+        this.stompSocket.unsubscribe("/send/finish/" + id);
+        this.stompSocket.unsubscribe("/send/start/" + id);
+        this.stompSocket.disconnect()
+        console.log(message)
+      })
+    })
+
+    this.game.events.emit("finish")
+  }
+
+  //time is in 1/10th of a second
+  timerFormatter() {
+    const mili = this.timer % 10;
+    const sec = Math.floor(this.timer/10) % 60
+    const min = Math.floor(this.timer/600)
+
+    let secText = sec.toString();
+    if(secText.length < 2) secText = '0' + sec
+
+    let minText = min.toString();
+    if(minText.length < 2) minText = '0' + min
+
+    return `${minText}:${secText}.${mili}`;
   }
 }

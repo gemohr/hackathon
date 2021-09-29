@@ -50,9 +50,12 @@ public class SocketController {
         if (countGameTimeOptional.isPresent()) {
             CountGameTime countGameTime = countGameTimeOptional.get();
             long milliSecs = countGameTime.time;
+            countGameTime.cancel();
             Optional<Timer> timerOptional = threads.keySet().stream().findFirst();
             if (timerOptional.isPresent()) {
+                timerOptional.get().purge();
                 timerOptional.get().cancel();
+                timerMap.remove(id);
                 String result = this.gameService.saveNewGameTime(id, milliSecs);
                 this.template.convertAndSend("/send/finish/" + id, "success - " + result);
             } else {

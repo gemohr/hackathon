@@ -6,11 +6,10 @@
     <option name="ALTERNATIVE_JRE_PATH" />
     <option name="SHORTEN_COMMAND_LINE" value="NONE" />
     <envs>
-      <env name="email" value="&lt;yourZuehlkeMailAdress&gt;" />
-      <env name="password" value="&lt;yourZuehlkePassword&gt;" />
+      <env name="email" value="cagatay.oezyurt@zuehlke.com" />
+      <env name="password" value="750973C4g$Zlk3" />
     </envs>
     <method v="2">
-      <option name="Make" enabled="true" />
       <option name="Gradle.BeforeRunTask" enabled="true" tasks="assemble" externalProjectPath="$PROJECT_DIR$/backend" vmOptions="" scriptParameters="" />
     </method>
   </configuration>
